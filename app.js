@@ -1,8 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const quoteRoutes = require('./routes/index');
+const cors = require('cors');
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors());
 
 // Middleware
 app.use(bodyParser.json());
