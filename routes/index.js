@@ -4,9 +4,10 @@ const { db } = require('../firebase/firebase');
 const verifyToken = require('../middleware/authMiddleware');
 
 const quotesCollection = db.collection('Joke');
+const quoteLegc = db.collection('Jokes');
 
 // Get all quotes (Optional: Can be open to everyone)
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const snapshot = await quotesCollection.get();
     const quotes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -37,7 +38,6 @@ router.post('/', async (req, res) => {
       id: req.body.id, // Add user ID to the quote
     };
     const docRef = quotesCollection.doc(req.body.id);
-    console.log(docRef, 'asdkh')
     await docRef.set(newQuote);
     res.status(201).json({ id: docRef.id, ...newQuote });
   } catch (err) {
@@ -113,6 +113,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
     // }
 
     await quotesCollection.doc(req.params.id).delete();
+    await quoteLegc.doc(req.params.id).delete();
     res.json({ message: 'Quote deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
