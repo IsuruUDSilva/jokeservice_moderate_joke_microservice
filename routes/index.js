@@ -16,17 +16,6 @@ router.get('/', verifyToken, async (req, res) => {
   }
 });
 
-// Get a single quote by ID
-// router.get('/:id', async (req, res) => {
-//   try {
-//     const doc = await quotesCollection.doc(req.params.id).get();
-//     if (!doc.exists) return res.status(404).json({ message: 'Quote not found' });
-//     res.json({ id: doc.id, ...doc.data() });
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
-
 // Create a new quote (Protected)
 router.post('/', verifyToken, async (req, res) => {
   try {
@@ -34,7 +23,7 @@ router.post('/', verifyToken, async (req, res) => {
       content: req.body.content,
       author: req.body.author,
       approved: false,
-      userId: req.user.uid, // Add user ID to the quote
+      userId: req.user.uid,
     };
     const docRef = await quotesCollection.add(newQuote);
     res.status(201).json({ id: docRef.id, ...newQuote });
